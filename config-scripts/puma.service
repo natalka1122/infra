@@ -24,7 +24,7 @@ WorkingDirectory=/home/appuser/reddit
 # an absolute URL to puma. For example /usr/local/bin/puma
 # Alternatively, create a binstub with `bundle binstubs puma --path ./sbin` in the WorkingDirectory
 ExecStart=/bin/bash -lc '/home/appuser/.rvm/gems/ruby-2.4.1/bin/puma -C /home/appuser/.rvm/gems/ruby-2.4.1/gems/puma-3.10.0/lib/puma.rb'
-
+PIDFile=/home/appuser/reddit/puma.pid
 # Variant: Rails start.
 # ExecStart=/<FULLPATH>/bin/puma -C <YOUR_APP_PATH>/config/puma.rb ../config.ru
 
