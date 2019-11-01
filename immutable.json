@@ -3,7 +3,7 @@
         "project_id": null,
         "source_image": null,
         "machine_type": "f1-micro",
-        "image_name": "reddit-base-{{timestamp}}",
+        "image_name": "reddit-app-{{timestamp}}",
         "zone": "europe-west1-b",
         "username": "appuser"
 },
@@ -26,7 +26,18 @@
         },
         {
             "type": "shell",
-            "script": "config-scripts/install_ruby.sh"
+            "script": "config-scripts/install_ruby.sh",
+            "execute_command": "sudo -u appuser -H -i {{.Path}}"
+        },
+        {
+            "type": "shell",
+            "script": "config-scripts/deploy.sh",
+            "execute_command": "sudo -u appuser -H -i {{.Path}}"
+        },
+        {
+            "type": "shell",
+            "script": "config-scripts/install_service.sh",
+            "execute_command": "sudo {{.Path}}"
         }
     ]
 }
