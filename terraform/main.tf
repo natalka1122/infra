@@ -20,6 +20,6 @@ resource "google_compute_instance" "app" {
         access_config {}
     }
     metadata = {
-        ssh-keys = "appuser:${file("C:\\keys\\gcloud112233445566\\appuser.pub")}"
+        ssh-keys = "appuser:zz${file("C:\\keys\\gcloud112233445566\\appuser.pub")}"
     }
 }
