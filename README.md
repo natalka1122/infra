@@ -35,15 +35,15 @@ terraform destroy
 Terraform beautify
 terraform fmt
 
-WHAT DO I WANT:
 Packer - with parametrized username
 0) variables.json - external packer variables
-1) ubuntu16.json - only mongodb and ruby == DONE
-2) immutable.json - all-included image == DONE
-3) reddit-db.json - only mongodb included == DONE
-4) reddit-app-ready.json - ruby included == TODO==TEST - creating
-5) reddit-app.json - app and ruby included == TODO==TEST
+1) ubuntu16.json - only mongodb and ruby
+2) immutable.json - all-included image
+3) reddit-db.json - only mongodb included
+4) reddit-app-ready.json - ruby included
+5) reddit-app.json - app and ruby included
 
+WHAT DO I WANT:
 terraform
 1) one server from ubuntu16 with app provisioned
 2) two servers from reddit-db and reddit-app-ready with app provisioned
