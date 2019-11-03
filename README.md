@@ -18,3 +18,19 @@ gcloud compute instances create --boot-disk-size=10GB --image=reddit-base-157259
 
 Immutable image == with installed app
 packer build -var-file=variables.json immutable.json
+
+===From terraform folder===
+Terraform start command
+terraform init
+
+Terraform dry-run
+terraform plan
+
+Terraform run
+terraform apply
+
+Terraform kill all command
+terraform destroy
+
+Terraform beautify
+terraform fmt
