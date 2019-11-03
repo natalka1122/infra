@@ -3,9 +3,9 @@
         "project_id": null,
         "source_image": null,
         "machine_type": "f1-micro",
-        "image_name": "reddit-base-{{timestamp}}",
+        "image_name": "reddit-app-ready-{{timestamp}}",
         "zone": "europe-west1-b",
-        "username": "appuser"
+        "username": "vasya4"
 },
     "builders": [
         {
@@ -15,18 +15,17 @@
             "source_image": "{{user `source_image`}}",
             "zone": "{{user `zone`}}",
             "ssh_username": "{{user `username`}}",
-            "machine_type": "{{user `machine_type`}}"
+            "machine_type": "{{user `machine_type`}}",
+            "image_description": "Image based on Ubuntu 16.04. Includes ruby. Username: {{user `username`}}",
+            "image_labels":{
+                "username": "{{user `username`}}"
+            }
         }
     ],
     "provisioners": [
         {
             "type": "shell",
-            "script": "config-scripts/install_mongodb.sh",
-            "execute_command": "sudo {{.Path}}"
-        },
-        {
-            "type": "shell",
-            "script": "config-scripts/install_ruby.sh"
+            "script": "scripts/install_ruby.sh"
         }
     ]
 }

@@ -1,0 +1,40 @@
+{
+    "variables": {
+        "project_id": null,
+        "source_image": null,
+        "machine_type": "f1-micro",
+        "image_name": "reddit-app-{{timestamp}}",
+        "zone": "europe-west1-b",
+        "username": "vasya5"
+},
+    "builders": [
+        {
+            "type": "googlecompute",
+            "project_id": "{{user `project_id`}}",
+            "image_name": "{{user `image_name`}}",
+            "source_image": "{{user `source_image`}}",
+            "zone": "{{user `zone`}}",
+            "ssh_username": "{{user `username`}}",
+            "machine_type": "{{user `machine_type`}}",
+            "image_description": "Image based on Ubuntu 16.04. Includes ruby, reddit-app and starting service. Username: {{user `username`}}",
+            "image_labels":{
+                "username": "{{user `username`}}"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "scripts/install_ruby.sh"
+        },
+        {
+            "type": "file",
+            "source": "scripts/puma.service",
+            "destination": "/tmp/puma.service"
+        },
+        {
+            "type": "shell",
+            "script": "scripts/deploy.sh"
+        }
+    ]
+}
