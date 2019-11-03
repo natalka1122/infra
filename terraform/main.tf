@@ -1,6 +1,15 @@
+terraform {
+  backend "gcs" {
+    bucket  = "terra-bucket-1234"
+    prefix  = "terraform/state"
+  }
+}
 provider "google" {
   project = "${var.project}"
   region  = "${var.region}"
+}
+resource "google_compute_address" "app_ip" {
+  name = "reddit-app-ip"
 }
 resource "google_compute_instance" "app" {
   name         = "reddit-app"
@@ -17,18 +26,12 @@ resource "google_compute_instance" "app" {
   network_interface {
     # сеть, к которой присоединить данный интерфейс
     network = "default"
-    # использовать ephemeral IP для доступа из Интернет
-    access_config {}
+    access_config {
+      nat_ip = "${google_compute_address.app_ip.address}"
+    }
   }
   metadata = {
     ssh-keys = "appuser:${file(var.public_key_path)}"
-  }
-  connection {
-    type        = "ssh"
-    host        = self.network_interface.0.access_config.0.nat_ip
-    user        = "appuser"
-    private_key = "${file(var.private_key_path)}"
-    agent       = false
   }
   provisioner "file" {
     source      = "files/puma.service"
@@ -55,4 +58,14 @@ resource "google_compute_firewall" "firewall_puma" {
   source_ranges = ["0.0.0.0/0"]
   # Правило применимо для инстансов с тегом …
   target_tags = ["reddit-app"]
+}
+resource "google_compute_firewall" "firewall_ssh" {
+  name        = "default-allow-ssh"
+  description = "Allow SSH from everywhere !"
+  network     = "default"
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+  source_ranges = ["0.0.0.0/0"]
 }
