@@ -1,0 +1,107 @@
+{
+    "format_version": "0.1",
+    "terraform_version": "0.12.13",
+    "values": {
+        "outputs": {
+            "app_external_ip": {
+                "sensitive": false,
+                "value": ""
+            }
+        },
+        "root_module": {
+            "child_modules": [
+                {
+                    "resources": [
+                        {
+                            "address": "google_compute_instance.app",
+                            "mode": "managed",
+                            "type": "google_compute_instance",
+                            "name": "app",
+                            "provider_name": "google",
+                            "schema_version": 6,
+                            "values": {
+                                "allow_stopping_for_update": null,
+                                "attached_disk": [],
+                                "boot_disk": [
+                                    {
+                                        "auto_delete": true,
+                                        "device_name": "persistent-disk-0",
+                                        "disk_encryption_key_raw": "",
+                                        "disk_encryption_key_sha256": "",
+                                        "initialize_params": [
+                                            {
+                                                "image": "https://www.googleapis.com/compute/v1/projects/terra-project-257811/global/images/reddit-base-1572820530",
+                                                "labels": {},
+                                                "size": 10,
+                                                "type": "pd-standard"
+                                            }
+                                        ],
+                                        "kms_key_self_link": "",
+                                        "mode": "READ_WRITE",
+                                        "source": "https://www.googleapis.com/compute/v1/projects/terra-project-257811/zones/europe-west1-b/disks/reddit-app"
+                                    }
+                                ],
+                                "can_ip_forward": false,
+                                "cpu_platform": "Intel Haswell",
+                                "deletion_protection": false,
+                                "description": "",
+                                "disk": [],
+                                "guest_accelerator": [],
+                                "hostname": "",
+                                "id": "reddit-app",
+                                "instance_id": "8474077065416380727",
+                                "label_fingerprint": "42WmSpB8rSM=",
+                                "labels": {},
+                                "machine_type": "g1-small",
+                                "metadata": {
+                                    "sshKeys": "appuser:ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAtQw/tijwaDcbi2GqUHzHvpemDlymPiaCoXV39oLlPAVbwhjOM4DEp23KoQVeNg6oVgivpMBNswvmEZhXvwwLkiAi1ioCgiOkuI4+Tvm0bCF/S87NOKdH0nFJxlU0/xiduUMmSpIdVMWe8wcdVb46SczMAScn56SJ/02GzeGeP6ONKUw06WFy1zyHufwgqwTlvEb12RjezqMxazEtF6ow77lP5J3/pdYxpbfOY3+uC1Y0lKTrWdgRM9Bc4HXvKd8eBBi02ecmUUgtfLEwkPH46KMNmCGkHHFlGJjE5kyqpSoLGlsES0f4Ixt27AhvC/OrN1D3dE2VUdhsiuIRTwfwkQ== appuser"
+                                },
+                                "metadata_fingerprint": "Yzf45zxOQEo=",
+                                "metadata_startup_script": "",
+                                "min_cpu_platform": "",
+                                "name": "reddit-app",
+                                "network_interface": [
+                                    {
+                                        "access_config": [
+                                            {
+                                                "assigned_nat_ip": "",
+                                                "nat_ip": "34.77.202.43",
+                                                "network_tier": "PREMIUM",
+                                                "public_ptr_domain_name": ""
+                                            }
+                                        ],
+                                        "address": "",
+                                        "alias_ip_range": [],
+                                        "name": "nic0",
+                                        "network": "https://www.googleapis.com/compute/v1/projects/terra-project-257811/global/networks/default",
+                                        "network_ip": "10.132.0.59",
+                                        "subnetwork": "https://www.googleapis.com/compute/v1/projects/terra-project-257811/regions/europe-west1/subnetworks/default",
+                                        "subnetwork_project": "terra-project-257811"
+                                    }
+                                ],
+                                "project": "terra-project-257811",
+                                "scheduling": [
+                                    {
+                                        "automatic_restart": true,
+                                        "node_affinities": [],
+                                        "on_host_maintenance": "MIGRATE",
+                                        "preemptible": false
+                                    }
+                                ],
+                                "scratch_disk": [],
+                                "self_link": "https://www.googleapis.com/compute/v1/projects/terra-project-257811/zones/europe-west1-b/instances/reddit-app",
+                                "service_account": [],
+                                "shielded_instance_config": [],
+                                "tags": [],
+                                "tags_fingerprint": "42WmSpB8rSM=",
+                                "timeouts": null,
+                                "zone": "europe-west1-b"
+                            }
+                        }
+                    ],
+                    "address": "module.app"
+                }
+            ]
+        }
+    }
+}
