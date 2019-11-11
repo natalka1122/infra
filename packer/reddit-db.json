@@ -27,6 +27,10 @@
             "type": "shell",
             "script": "scripts/install_mongodb.sh",
             "pause_before": "10s"
+        },
+        {
+            "type": "shell",
+            "script": "scripts/mongodb_binds_all.sh"
         }
     ]
 }

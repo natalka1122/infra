@@ -5,7 +5,7 @@
         "machine_type": "f1-micro",
         "image_name": "reddit-app-ready-{{timestamp}}",
         "zone": "europe-west1-b",
-        "username": "vasya4"
+        "username": "appuser"
 },
     "builders": [
         {
