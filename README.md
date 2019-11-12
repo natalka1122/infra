@@ -18,3 +18,32 @@ gcloud compute instances create --boot-disk-size=10GB --image=reddit-base-157259
 
 Immutable image == with installed app
 packer build -var-file=variables.json immutable.json
+
+===From terraform folder===
+Terraform start command
+terraform init
+
+Terraform dry-run
+terraform plan
+
+Terraform run
+terraform apply
+
+Terraform kill all command
+terraform destroy
+
+Terraform beautify
+terraform fmt
+
+Packer - with parametrized username
+0) variables.json - external packer variables
+1) ubuntu16.json - only mongodb and ruby
+2) immutable.json - all-included image
+3) reddit-db.json - only mongodb included
+4) reddit-app-ready.json - ruby included
+5) reddit-app.json - app and ruby included
+
+WHAT DO I WANT:
+terraform
+1) one server from ubuntu16 with app provisioned
+2) two servers from reddit-db and reddit-app-ready with app provisioned

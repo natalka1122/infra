@@ -1,0 +1,7 @@
+project            = "your-project-name"
+key_path_public    = "path-to-the-public-key"
+key_path_private   = "path-to-the-private-key"
+use_ssh_agent      = "true or false"
+disk_image_app     = "name-of-the-image-for-application"
+disk_image_db      = "name-of-the-image-for-database"
+ssh_source_address = "0.0.0.0/0"

@@ -1,25 +1,10 @@
-provider "google" {
-    project = "terra-project-257811"
-    region = "europe-west1"
+terraform {
+  backend "gcs" {
+    bucket = "terra-bucket-1234"
+    prefix = "terraform/state"
+  }
 }
-resource "google_compute_instance" "app" {
-    name = "reddit-app"
-    machine_type = "g1-small"
-    zone = "europe-west1-b"
-    # определение загрузочного диска
-    boot_disk {
-        initialize_params {
-            image = "reddit-base-1572728428"
-        }
-    }
-    # определение сетевого интерфейса
-    network_interface {
-        # сеть, к которой присоединить данный интерфейс
-        network = "default"
-        # использовать ephemeral IP для доступа из Интернет
-        access_config {}
-    }
-    metadata = {
-        ssh-keys = "appuser:${file("C:\\keys\\gcloud112233445566\\appuser.pub")}"
-    }
+provider "google" {
+  project = "${var.project}"
+  region  = "${var.region}"
 }
