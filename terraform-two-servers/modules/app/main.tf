@@ -2,7 +2,7 @@ resource "google_compute_instance" "app" {
   name         = "reddit-app"
   machine_type = "${var.machine_type}"
   zone         = "${var.zone}"
-  tags         = ["${var.net-tag-app}"]
+  tags         = ["${var.net_tag_app}"]
   boot_disk {
     initialize_params {
       image = "${var.disk_image_app}"
@@ -29,19 +29,17 @@ resource "google_compute_instance" "app" {
     content     = "${file("${path.module}/files/puma.service")}" // so I user this replacement
     destination = "/tmp/puma.service"
   }
+  provisioner "file" {
+    #source      = "${path.module}/files/deploy.sh" == somehow it does not work
+    content     = "${file("${path.module}/files/deploy.sh")}" // so I user this replacement
+    destination = "/tmp/deploy.sh"
+  }
   provisioner "remote-exec" {
-    script = "${path.module}/files/deploy.sh"
+    inline = [
+      "chmod +x /tmp/deploy.sh",
+      "/tmp/deploy.sh ${var.db_address}" // workaroud to pass variable as a script parameter
+    ]
   }
-}
-resource "google_compute_firewall" "firewall_puma" {
-  name    = "allow-puma-default"
-  network = "default"
-  allow {
-    protocol = "tcp"
-    ports    = ["9292"]
-  }
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["${var.net-tag-app}"]
 }
 resource "google_compute_address" "app_ip" {
   name = "reddit-app-ip"

@@ -18,10 +18,12 @@ variable zone {
   description = "Google Cloud zone"
   default     = "europe-west1-b"
 }
-variable "net-tag-app" {
+variable "net_tag_app" {
   description = "Network tag for instance"
-  default     = "reddit-app"
 }
 variable "username" {
   description = "Username for application"
+}
+variable "db_address" {
+  description = "IP address for mongodb server"
 }

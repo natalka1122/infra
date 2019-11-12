@@ -15,7 +15,10 @@ variable "use_ssh_agent" {
   description = "True if ssh-agent is used"
 }
 variable "disk_image_app" {
-  description = "Disk image"
+  description = "Disk image for application instance"
+}
+variable "disk_image_db" {
+  description = "Disk image for database instance"
 }
 variable "ssh_source_address" {
   description = "Allowed source address for SSH"
@@ -24,4 +27,12 @@ variable "ssh_source_address" {
 variable "username" {
   description = "Username for application"
   default     = "appuser"
+}
+variable "net_tag_app" {
+  description = "Network tag for application instance"
+  default     = "reddit-app"
+}
+variable "net_tag_db" {
+  description = "Network tag for database instance"
+  default     = "reddit-db"
 }
