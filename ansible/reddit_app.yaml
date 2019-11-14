@@ -1,0 +1,83 @@
+# Setup and configure ruby things for reddit app
+- name: "Reddit App: Configure app environment"
+  hosts: ruby
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - name: Install ruby and rubygems and required packages
+    apt:
+      pkg:
+      - ruby-full
+      - ruby-dev
+      - build-essential
+      update_cache: yes
+      force_apt_get: yes
+
+  - name: Install Ruby bundler
+    gem:
+      name: bundler
+      state: present
+      user_install: no
+
+# Setup and configure mongodb for reddit app
+- name: "Reddit App: Install mongodb"
+  hosts: db
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - name: Add an Apt signing key
+    apt_key:
+      url: https://www.mongodb.org/static/pgp/server-4.2.asc
+
+  - name: Add repository
+    apt_repository:
+      repo: deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse
+      state: present
+      filename: mongodb-org-4.2.list
+
+  - name: Install mongodb package
+    apt:
+      pkg:
+      - mongodb-org
+      update_cache: yes
+      force_apt_get: yes
+
+  - name: Start mongod service
+    systemd:
+      state: started
+      name: mongod
+
+# Deploy reddit app
+- name: "Reddit App: Deploy application"
+  hosts: app
+  gather_facts: no
+  become: yes 
+
+  tasks:
+  - name: Create appuser
+    user:
+      name: appuser
+
+  - name: Git clone the repo
+    git:
+      repo: 'https://github.com/natalka1122/reddit.git'
+      dest: /srv/reddit
+      force: yes
+
+  - name: Bundle install
+    bundler: 
+      gemfile: /srv/reddit/Gemfile
+
+  - name: Copy puma.service file
+    copy:
+      src: files/puma.service
+      dest: /etc/systemd/system/puma.service
+      force: yes
+
+  - name: Start puma service
+    systemd:
+      state: restarted
+      name: puma
+      daemon_reload: yes
