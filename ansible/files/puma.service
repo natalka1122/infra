@@ -1,0 +1,13 @@
+[Unit]
+Description=Puma HTTP Server
+After=network.target
+[Service]
+Type=simple
+User=appuser
+WorkingDirectory=/srv/reddit
+Environment="DATABASE_URL=127.0.0.1:27017"
+ExecStart=/bin/bash -lc '/var/lib/gems/2.3.0/gems/puma-3.10.0/bin/puma -C /var/lib/gems/2.3.0/gems/puma-3.10.0/lib/puma.rb'
+PIDFile=/srv/reddit/puma.pid
+Restart=always
+[Install]
+WantedBy=multi-user.target
