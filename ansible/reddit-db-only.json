@@ -1,0 +1,36 @@
+{
+    "variables": {
+        "project_id": null,
+        "source_image": null,
+        "machine_type": "f1-micro",
+        "image_name": "reddit-db-only-{{timestamp}}",
+        "zone": "europe-west1-b",
+        "username": "appuser"
+},
+    "builders": [
+        {
+            "type": "googlecompute",
+            "project_id": "{{user `project_id`}}",
+            "image_name": "{{user `image_name`}}",
+            "source_image": "{{user `source_image`}}",
+            "zone": "{{user `zone`}}",
+            "ssh_username": "{{user `username`}}",
+            "machine_type": "{{user `machine_type`}}",
+            "image_description": "Image based on Ubuntu 16.04. Includes ruby. Username: {{user `username`}}",
+            "image_labels":{
+                "username": "{{user `username`}}"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible",
+            "extra_arguments": [
+                "-e",
+                "'ansible_python_interpreter=/usr/bin/python3'"
+              ],
+            "groups": [ "db", "db_only" ],
+            "playbook_file": "./reddit_app.yaml"
+          }
+    ]
+}

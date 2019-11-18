@@ -1,0 +1,151 @@
+# Add apt key and repo
+- name: "Reddit App: Add apt repositories"
+  hosts: db
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - name: Add an Apt signing key
+    apt_key:
+      url: https://www.mongodb.org/static/pgp/server-4.2.asc
+
+  - name: Add repository
+    apt_repository:
+      repo: deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse
+      state: present
+      filename: mongodb-org-4.2.list
+
+- name: "Reddit App: Update repositories"
+  hosts: all
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - name: Update repositories
+    apt:
+      update_cache: yes
+      force_apt_get: yes
+
+# Install packets
+- name: "Reddit App: Install ruby packets"
+  hosts: ruby
+  gather_facts: no
+  become: yes
+
+  tasks: 
+  - name: Install ruby and rubygems and required packages
+    apt:
+      pkg:
+      - ruby-full
+      - ruby-dev
+      - build-essential
+      force_apt_get: yes
+    register: rubyinstall
+
+  - name: Install Ruby bundler
+    gem:
+      name: bundler
+      state: present
+      user_install: no
+    register: bundlerinstall
+
+- name: "Reddit App: Install db packets"
+  hosts: db
+  gather_facts: no
+  become: yes
+
+  tasks: 
+  - name: Install mongodb package
+    apt:
+      pkg:
+      - mongodb-org
+      force_apt_get: yes
+    register: mongodbinstall
+
+# Configure mongod service
+- name: "Reddit App: Configure mongodb"
+  hosts: db
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: Copy mongod.conf file
+      copy:
+        src: files/mongod.conf
+        dest: /etc/mongod.conf
+      register: mongodconf
+
+# Install and configure reddit app
+- name: "Reddit App: Install and configure application"
+  hosts: app
+  gather_facts: no
+
+  tasks:
+  - name: Create appuser
+    user:
+      name: appuser
+    become: yes 
+
+  - name: Git clone the repo
+    git:
+      repo: 'https://github.com/natalka1122/reddit.git'
+      dest: /srv/reddit
+      force: yes
+    become: yes 
+    register: gitcloneapp
+
+  - name: App gem install
+    bundler: 
+      gemfile: /srv/reddit/Gemfile
+    register: appgeminstal
+    when: rubyinstall.changed or bundlerinstall.changed or gitcloneapp.changed
+
+  - name: Copy puma.service file
+    copy:
+      src: files/puma.service
+      dest: /etc/systemd/system/puma.service
+    become: yes 
+    register: pumaservice
+
+  - name: Systemd service reload
+    systemd:
+      daemon_reload: yes
+    become: yes 
+
+# Restart services if necessary
+- name: "Reddit App: Enable and restart db service"
+  hosts: db
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - name: Restart mongod service
+    systemd:
+      state: restarted
+      name: mongod
+    when: mongodconf.changed
+
+  - name: Enable mongod service
+    systemd:
+      state: started
+      name: mongod
+      enabled: yes
+
+- name: "Reddit App: Enable and restart application service"
+  hosts: app
+  gather_facts: no
+  become: yes
+
+  tasks:
+  - name: Restart puma service
+    systemd:
+      name: puma
+      state: restarted
+    when: rubyinstall.changed or bundlerinstall.changed or gitcloneapp.changed or appgeminstal.changed or pumaservice.changed
+
+  - name: Enable puma service
+    systemd:
+      name: puma
+      state: started
+      enabled: yes
+#END
