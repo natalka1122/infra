@@ -80,7 +80,8 @@ terraform fmt
 1) one server from ubuntu16 with app provisioned
 2) two servers from reddit-db and reddit-app-ready with app provisioned
 
-## Image name agreement
+## In ansible folder created files for images creation isinf ansible provisioner
+### Image name agreement
 
 |  | mongod | mongod-only | ruby | app |
 |--------------------|--------|-------------|------|-----|
